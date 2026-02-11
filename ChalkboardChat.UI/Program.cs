@@ -1,6 +1,8 @@
+using ChalkboardChat.DAL.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ChalkboardChat.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
