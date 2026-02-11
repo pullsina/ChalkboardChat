@@ -1,0 +1,22 @@
+﻿@page
+@model ChalkboardChat.UI.Pages.MessagesModel
+
+<h2>Message board</h2>
+
+<div class="messages">
+    @foreach (var msg in Model.Messages)
+    {
+        <div class="message @(msg.IsMine ? "mine" : "other")">
+            <div class="meta">
+                <strong>@msg.Username</strong>
+                <span>@msg.Date.ToString("yyyy-MM-dd HH:mm")</span>
+            </div>
+            <p>@msg.Text</p>
+        </div>
+    }
+</div>
+
+<form method="post" class="post-form">
+    <textarea asp-for="NewMessageText" placeholder="Write a message..."></textarea>
+    <button type="submit">Post</button>
+</form>
