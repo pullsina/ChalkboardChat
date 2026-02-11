@@ -25,7 +25,18 @@ namespace ChalkboardChat.UI.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            // TODO: call AuthService later
+            // TODO: UI -> Logic layer
+            // var result = await _authService.RegisterAsync(Username, Password);
+
+            // TODO: handle result from service
+            // if (!result.Succeeded)
+            // {
+            //     foreach (var error in result.Errors)
+            //         ModelState.AddModelError("", error.Description);
+            //     return Page();
+            // }
+
+            // TODO: redirect after successful registration
             return RedirectToPage("/Login");
         }
     }

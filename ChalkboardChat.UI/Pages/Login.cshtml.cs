@@ -23,7 +23,17 @@ namespace ChalkboardChat.UI.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            // TODO: _authService.Login(Username, Password)
+            // TODO: UI -> AuthService.LoginAsync(...)
+
+            /*
+            var result = await _authService.LoginAsync(Username, Password);
+
+            if (!result)
+            {
+                ModelState.AddModelError("", "Invalid username or password");
+                return Page();
+            }
+            */
             return RedirectToPage("/Messages");
         }
     }
