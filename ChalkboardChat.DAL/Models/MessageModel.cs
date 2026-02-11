@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChalkboardChat.DAL
+namespace ChalkboardChat.DAL.Models
 {
     public class MessageModel
     {
