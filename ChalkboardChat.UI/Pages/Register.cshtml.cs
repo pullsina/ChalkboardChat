@@ -17,11 +17,6 @@ namespace ChalkboardChat.UI.Pages
         [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; } = null!;
         
-       public async Task<IActionResult> OnPost()
-        {
-            if (!ModelState.IsValid)
-                return Page();
 
-        }
     }
 }

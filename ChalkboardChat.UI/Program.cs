@@ -15,7 +15,7 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MessageConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     // ===== Password settings =====
     options.Password.RequireDigit = false;
