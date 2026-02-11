@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ChalkboardChat.DAL.Data
 {
-    internal class AuthDbContext : IdentityDbContext
+    public class AuthDbContext : IdentityDbContext
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
