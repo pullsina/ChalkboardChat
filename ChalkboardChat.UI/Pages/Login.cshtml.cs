@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ChalkboardChat.UI.Pages
 {
-    public class RegisterModel : PageModel
+    public class LoginModel : PageModel
     {
+        public void OnGet()
+        {
+        }
+
         [BindProperty, Required]
         public string Username { get; set; } = null!;
 
@@ -14,19 +17,14 @@ namespace ChalkboardChat.UI.Pages
         [DataType(DataType.Password)]
         public string Password { get; set; } = null!;
 
-        [BindProperty, Compare(nameof(Password))]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; } = null!;
-
-        public void OnGet() { }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
                 return Page();
 
-            // TODO: call AuthService later
-            return RedirectToPage("/Login");
+            // TODO: _authService.Login(Username, Password)
+            return RedirectToPage("/Messages");
         }
     }
 }
