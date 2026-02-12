@@ -7,6 +7,16 @@ namespace ChalkboardChat.UI.Pages
 {
     public class RegisterModel : PageModel
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public RegisterModel(UserManager<IdentityUser> userManager,
+                             SignInManager<IdentityUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
         [BindProperty, Required]
         public string Username { get; set; } = null!;
 
@@ -25,16 +35,20 @@ namespace ChalkboardChat.UI.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            // TODO: UI -> Logic layer
-            // var result = await _authService.RegisterAsync(Username, Password);
+            var user = new IdentityUser 
+            { 
+                UserName = Username,
+                Email = Username
 
-            // TODO: handle result from service
-            // if (!result.Succeeded)
-            // {
-            //     foreach (var error in result.Errors)
-            //         ModelState.AddModelError("", error.Description);
-            //     return Page();
-            // }
+            };
+            var result = await _userManager.CreateAsync(user, Password);
+
+             if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+                 return Page();
+             }
 
             // TODO: redirect after successful registration
             return RedirectToPage("/Login");
