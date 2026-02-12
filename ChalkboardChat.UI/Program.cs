@@ -56,3 +56,25 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
+//DATA lager
+// DbContext AppDbContext identityDbConyext
+//Migration
+//Model movie, oerson, produkt
+//Repository
+//SQL kod
+
+//BLL Applikations lager
+// All affärslogik
+//Service klasser
+//Interface - IService
+//Dto
+//Valideringsregler
+//API anrop
+
+//UI
+//Razor pages
+//Om MVC controller (ingen affärslogik)
+//ViewModel (om man behöver flera objekt i en vy)
+// anroper services i BLL
+// ModelState
