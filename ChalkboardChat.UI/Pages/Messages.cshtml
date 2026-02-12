@@ -19,18 +19,15 @@
             else
             {
                 <p>@msg.Text</p>
+
+                @if (msg.IsMine)
+                {
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="id" value="@msg.Id" />
+                        <button type="submit">Delete</button>
+                    </form>
+                }
             }
-            else
-            {
-            <p>@msg.Text</p>
-            @if ( msg.IsMine)
-            {
-                <form method="post" asp-page-handler="Delete">
-                    <input type="hidden" name="id" value="@msg.Id" />
-                    <button type="submit">Delete</button>
-                </form>
-            }
-            }         
         </div>
     }
 </div>

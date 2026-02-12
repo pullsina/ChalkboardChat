@@ -10,11 +10,11 @@ namespace ChalkboardChat.BLL.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly MessageRepository _repo;
+        private readonly IMessageRepository _repo;
 
-        public MessageService(MessageRepository repo)
+        public MessageService(IMessageRepository repo)
         {
-            _repo=repo;
+            _repo = repo;
         }
         public async Task<IEnumerable<MessageModel>> GetAllMessagesAsync()
         {
@@ -24,7 +24,7 @@ namespace ChalkboardChat.BLL.Services
         public async Task AddMessageAsync(string user, string message)
         {
             
-            if (!string.IsNullOrWhiteSpace(user)||!string.IsNullOrWhiteSpace(message))
+            if (string.IsNullOrWhiteSpace(user)||string.IsNullOrWhiteSpace(message))
             {
                 //kan inte returna page()
                 //kan inte RedirectToPage()
