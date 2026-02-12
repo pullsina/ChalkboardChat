@@ -1,7 +1,8 @@
 ﻿@page
-@model ChalkboardChat.UI.Pages.RegisterModel
-
-<h2>Create account</h2>
+@model ChalkboardChat.UI.Pages.LoginModel
+@{
+}
+<h2>Login</h2>
 
 <form method="post" class="auth-form">
     <div class="form-group">
@@ -16,13 +17,7 @@
         <span asp-validation-for="Password" class="form-error"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" type="password" class="form-input" />
-        <span asp-validation-for="ConfirmPassword" class="form-error"></span>
-    </div>
-
-    <button type="submit" class="btn-primary">Register</button>
+    <button type="submit" class="btn-primary">Login</button>
 </form>
 
 <partial name="_ValidationScriptsPartial" />

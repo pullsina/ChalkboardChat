@@ -1,6 +1,9 @@
+using ChalkboardChat.DAL.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ChalkboardChat.DAL;
+using ChalkboardChat.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MessageConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     // ===== Password settings =====
     options.Password.RequireDigit = false;
