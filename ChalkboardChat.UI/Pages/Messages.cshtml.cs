@@ -1,39 +1,41 @@
+using ChalkboardChat.BLL.Services;
+using ChalkboardChat.UI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChalkboardChat.UI.Pages
 {
+    [Authorize]
     public class MessagesModel : PageModel
     {
-        /*
-          private readonly MessageService _messageService;
+        
+        private readonly IMessageService _messageService;
 
-        public MessagesModel(MessageService messageService)
+        public MessagesModel(IMessageService messageService)
         {
             _messageService = messageService;
         }       
-         */
-        public List<MessageViewModel> Messages { get; set; } = new();
+        
+        public IEnumerable<MessageViewModel> Messages { get; set; } = new List<MessageViewModel>();
 
         [BindProperty]
         public string NewMessageText { get; set; } = "";
 
         public async Task OnGetAsync()
         {
-            // FEJKDATA tills service finns
-            Messages = new List<MessageViewModel>
-            {
-                new() { Username="Alice", Text="Hello world", Date=DateTime.Now.AddMinutes(-10), IsMine=false },
-                new() { Username="You", Text="Hi Alice!", Date=DateTime.Now.AddMinutes(-5), IsMine=true }
-            };
-
-            /*
-             {
             // UI -> Logic layer
-            Messages = await _messageService.GetAllMessagesForUserAsync(User);
-        }
-             */
-
+            var data = await _messageService.GetAllMessagesAsync();
+            //Mappar data från service (MessageModel) till viewmodel (MessageViewModel)
+            Messages = data.Select(m => new MessageViewModel
+            {
+                Id = m.Id,
+                Username = m.Username,
+                Text = m.Message,
+                Date = m.Date,
+                IsMine = m.Username == User.Identity!.Name,
+                IsDeleted = m.Message == null
+            }).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -41,17 +43,26 @@ namespace ChalkboardChat.UI.Pages
             if (string.IsNullOrWhiteSpace(NewMessageText))
                 return Page();
 
-            // TODO: await _messageService.CreateMessageAsync(User, NewMessageText);
+            await _messageService.AddMessageAsync(User.Identity!.Name!, NewMessageText);
             return RedirectToPage();
         }
-    }
 
-    public class MessageViewModel
-    {
-        public string Username { get; set; } = "";
-        public string Text { get; set; } = "";
-        public DateTime Date { get; set; }
-        public bool IsMine { get; set; }
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            //Här anpassar jag delete -funktionen så att endast den användare
+            //som skapat meddelandet kan ta bort det
+            var allMessages = await _messageService.GetAllMessagesAsync();
+            //skulle vara bättre att i MessegeService Delete metoden tog id
+            //som parametr istället av hela user    
+            var messageToDelete = allMessages.FirstOrDefault(m => m.Id == id);
+
+            if (messageToDelete == null || messageToDelete.Username != User.Identity!.Name)
+            {
+                return Forbid();
+            }
+            await _messageService.DeleteMessageAsync(messageToDelete);
+            return RedirectToPage();
+        }
     }
 }
 

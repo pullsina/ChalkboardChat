@@ -11,7 +11,26 @@
                 <strong>@msg.Username</strong>
                 <span>@msg.Date.ToString("yyyy-MM-dd HH:mm")</span>
             </div>
+
+            @if (msg.IsDeleted)
+            {
+                <p class="deleted-text">Message was deleted by its owner</p>
+            }
+            else
+            {
+                <p>@msg.Text</p>
+            }
+            else
+            {
             <p>@msg.Text</p>
+            @if ( msg.IsMine)
+            {
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="id" value="@msg.Id" />
+                    <button type="submit">Delete</button>
+                </form>
+            }
+            }         
         </div>
     }
 </div>
