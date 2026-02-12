@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
@@ -6,8 +7,14 @@ namespace ChalkboardChat.UI.Pages
 {
     public class LoginModel : PageModel
     {
-        public void OnGet()
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public LoginModel(UserManager<IdentityUser> userManager,
+                             SignInManager<IdentityUser> signInManager)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [BindProperty, Required]
@@ -25,15 +32,21 @@ namespace ChalkboardChat.UI.Pages
 
             // TODO: UI -> AuthService.LoginAsync(...)
 
-            /*
-            var result = await _authService.LoginAsync(Username, Password);
+          
+            var result = await _signInManager.PasswordSignInAsync(
+                Username,
+    Password,
+    isPersistent: false,
+    lockoutOnFailure: false
 
-            if (!result)
+                );
+
+            if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Invalid username or password");
                 return Page();
             }
-            */
+           
             return RedirectToPage("/Messages");
         }
     }

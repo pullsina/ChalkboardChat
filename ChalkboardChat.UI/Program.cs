@@ -1,9 +1,10 @@
+using ChalkboardChat.BLL.Services;
+using ChalkboardChat.DAL;
 using ChalkboardChat.DAL.Data;
+using ChalkboardChat.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ChalkboardChat.DAL;
-using ChalkboardChat.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MessageConnection")));
 
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
+builder.Services.AddScoped<IMessageService, MessageService>();
+
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
