@@ -3,6 +3,7 @@ using ChalkboardChat.UI.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace ChalkboardChat.UI.Pages
 {
@@ -40,11 +41,22 @@ namespace ChalkboardChat.UI.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (string.IsNullOrWhiteSpace(NewMessageText))
-                return Page();
 
-            await _messageService.AddMessageAsync(User.Identity!.Name!, NewMessageText);
-            return RedirectToPage();
+
+            if (string.IsNullOrWhiteSpace(NewMessageText))
+            {
+                return Page();
+            }
+            else
+            {
+                var success = await _messageService.AddMessageAsync(User, NewMessageText);
+                if (!success)
+                {
+                    ModelState.AddModelError("", "Failed to add message. Please try again.");
+                    return Page();
+                }
+                return RedirectToPage();
+            }
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
