@@ -2,8 +2,10 @@
 using ChalkboardChat.DAL;
 using ChalkboardChat.DAL.Models;
 using ChalkboardChat.DAL.Repositories;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace ChalkboardChat.BLL.Services
@@ -11,44 +13,56 @@ namespace ChalkboardChat.BLL.Services
     public class MessageService : IMessageService
     {
         private readonly IMessageRepository _repo;
-
-        public MessageService(IMessageRepository repo)
+        private readonly UserManager<IdentityUser> _userManager;
+        public MessageService(IMessageRepository repo, UserManager<IdentityUser> userManager)
         {
             _repo = repo;
+            _userManager = userManager;
         }
         public async Task<IEnumerable<MessageModel>> GetAllMessagesAsync()
         {
-           return await _repo.GetAllMessagesAsync();
+            return await _repo.GetAllMessagesAsync();
         }
 
-        public async Task AddMessageAsync(string user, string message)
+        public async Task<bool> AddMessageAsync(ClaimsPrincipal user, string message)
         {
-            
-            if (string.IsNullOrWhiteSpace(user)||string.IsNullOrWhiteSpace(message))
+
+            if (user.Identity?.IsAuthenticated != true || string.IsNullOrWhiteSpace(message))
             {
-                //kan inte returna page()
-                //kan inte RedirectToPage()
-                throw new Exception("User eller message är null");
+                return false;
             }
             var messageModel = new MessageModel
             {
-               Username = user,
-               Message = message,
-               Date = DateTime.Now
+                Username = user.Identity!.Name!,
+                UserId = _userManager.GetUserId(user)!,
+                Message = message,
+                Date = DateTime.Now
             };
 
-             await _repo.AddMessageAsync(messageModel);
-
+            await _repo.AddMessageAsync(messageModel);
+            return true;
         }
 
-        public async Task<MessageModel> DeleteMessageAsync(MessageModel message)
+        public async Task<bool> DeleteMessageAsync(ClaimsPrincipal user, int messageId)
         {
-            await _repo.DeleteMessageAsync(message);
-            if (message.Message == null) 
+            // Först hämtar vi alla meddelanden och hittar det som ska tas bort
+            var allMessages = await _repo.GetAllMessagesAsync();
+            var messageToDelete = allMessages.FirstOrDefault(m => m.Id == messageId);
+
+            if (messageToDelete == null)
             {
-                throw new Exception("Message är null");
+                return false; // Meddelandet finns inte
             }
-            return (message);
+
+            var currentUserId = _userManager.GetUserId(user);
+
+            if (messageToDelete.UserId != currentUserId)
+            {
+                return false; // AnvändarId matchar ej med meddelandets UserId. Har inte rätt att ta bort detta meddelande
+            }
+
+            await _repo.DeleteMessageAsync(messageToDelete);
+            return true;
         }
     }
 }
