@@ -1,30 +1,30 @@
 ﻿@page
-@model ChalkboardChat.UI.Pages.MessagesModel
+@model MessagesModel
 
-<h2>Message board</h2>
+<h2 class="title">Message Board</h2>
 
-<div class="messages">
+<div class="messages-container">
     @foreach (var msg in Model.Messages)
     {
         <div class="message @(msg.IsMine ? "mine" : "other")">
-            <div class="meta">
-                <strong>@msg.Username</strong>
-                <span>@msg.Date.ToString("yyyy-MM-dd HH:mm")</span>
+            <div class="message-header">
+                <span class="username">@msg.Username</span>
+                <span class="date">@msg.Date.ToString("yyyy-MM-dd HH:mm")</span>
             </div>
 
             @if (msg.IsDeleted)
             {
-                <p class="deleted-text">Message was deleted by its owner</p>
+                <p class="deleted">Message was deleted</p>
             }
             else
             {
-                <p>@msg.Text</p>
+                <p class="text">@msg.Text</p>
 
                 @if (msg.IsMine)
                 {
-                    <form method="post" asp-page-handler="Delete">
+                    <form method="post" asp-page-handler="Delete" class="delete-form">
                         <input type="hidden" name="id" value="@msg.Id" />
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="delete-btn">Delete</button>
                     </form>
                 }
             }
@@ -33,6 +33,6 @@
 </div>
 
 <form method="post" class="post-form">
-    <textarea asp-for="NewMessageText" placeholder="Write a message..."></textarea>
-    <button type="submit">Post</button>
+    <textarea asp-for="NewMessageText" placeholder="Write a message..." class="input-area"></textarea>
+    <button type="submit" class="send-btn">Send</button>
 </form>
