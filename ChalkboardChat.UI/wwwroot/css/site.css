@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -184,4 +184,90 @@ h2 {
 
     .send-btn:hover {
         background-color: #3e8e41;
+    }
+
+/* Profile */
+.status-message {
+    background-color: #e0ffe0;
+    border: 1px solid #4caf50;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+    .status-message:contains("❌") {
+        background-color: #ffe0e0;
+        border-color: #ff4c4c;
+        color: #b30000;
+    }
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+.profile-section {
+    margin-bottom: 30px;
+}
+
+.form-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-field {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.primary-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+    .primary-btn:hover {
+        background-color: #3e8e41;
+    }
+
+.danger-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+    .danger-btn:hover {
+        background-color: #ff4c4c;
+    }
+
+.status-message {
+    background-color: #e0ffe0;
+    border: 1px solid #4caf50;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+.logout-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+    .logout-btn:hover {
+        background-color: #d5d5d5;
     }

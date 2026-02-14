@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -39,8 +39,8 @@ namespace ChalkboardChat.UI.Pages
 
             if (string.IsNullOrWhiteSpace(NewUsername))
             {
-                ModelState.AddModelError("", "Username cannot be empty");
-                return Page();
+                TempData["StatusMessage"] = "❌ Username cannot be empty.";
+                return RedirectToPage();
             }
 
             CurrentUser.UserName = NewUsername;
@@ -50,12 +50,13 @@ namespace ChalkboardChat.UI.Pages
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Could not update username");
-                return Page();
+                TempData["StatusMessage"] = "❌ Could not update username.";
+                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(CurrentUser);
 
+            TempData["StatusMessage"] = "✔ Username updated successfully!";
             return RedirectToPage();
         }
 
@@ -63,17 +64,43 @@ namespace ChalkboardChat.UI.Pages
         {
             CurrentUser = await _userManager.GetUserAsync(User);
 
+            if (string.IsNullOrWhiteSpace(OldPassword) || string.IsNullOrWhiteSpace(NewPassword))
+            {
+                TempData["StatusMessage"] = "❌ Both password fields must be filled in.";
+                return RedirectToPage();
+            }
+
             var result = await _userManager.ChangePasswordAsync(CurrentUser, OldPassword, NewPassword);
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Password change failed");
-                return Page();
+                TempData["StatusMessage"] = "❌ Password change failed. Make sure your old password is correct.";
+                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(CurrentUser);
 
+            TempData["StatusMessage"] = "✔ Password changed successfully!";
             return RedirectToPage();
         }
+
+        public async Task<IActionResult> OnPostDeleteAccountAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                TempData["StatusMessage"] = "❌ Could not delete account.";
+                return RedirectToPage();
+            }
+
+            await _signInManager.SignOutAsync();
+            await _userManager.DeleteAsync(user);
+
+            TempData["StatusMessage"] = "✔ Account deleted.";
+            return RedirectToPage("/Login");
+        }
+
+
     }
 }

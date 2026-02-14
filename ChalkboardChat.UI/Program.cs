@@ -1,4 +1,4 @@
-using ChalkboardChat.BLL.Services;
+﻿using ChalkboardChat.BLL.Services;
 using ChalkboardChat.DAL;
 using ChalkboardChat.DAL.Data;
 using ChalkboardChat.DAL.Repositories;
@@ -36,6 +36,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<AuthDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+
+    // Viktigt: gör cookien icke‑persistent
+    options.Cookie.MaxAge = null; // Cookie försvinner när webbläsaren stängs
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,7 +78,7 @@ app.Run();
 //SQL kod
 
 //BLL Applikations lager
-// All aff�rslogik
+// All affärslogik
 //Service klasser
 //Interface - IService
 //Dto
@@ -78,7 +87,7 @@ app.Run();
 
 //UI
 //Razor pages
-//Om MVC controller (ingen aff�rslogik)
-//ViewModel (om man beh�ver flera objekt i en vy)
+//Om MVC controller (ingen affärslogik)
+//ViewModel (om man behöver flera objekt i en vy)
 // anroper services i BLL
 // ModelState
