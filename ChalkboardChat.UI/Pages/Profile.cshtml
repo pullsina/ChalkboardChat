@@ -1,0 +1,29 @@
+﻿@page
+@model ProfileModel
+
+<h2>Your Profile</h2>
+
+<p><strong>Username:</strong> @Model.CurrentUser?.UserName</p>
+
+<hr />
+
+<h3>Change Username</h3>
+<form method="post" asp-page-handler="ChangeUsername">
+    <input asp-for="NewUsername" placeholder="New username" />
+    <button type="submit">Save</button>
+</form>
+
+<hr />
+
+<h3>Change Password</h3>
+<form method="post" asp-page-handler="ChangePassword">
+    <input asp-for="OldPassword" type="password" placeholder="Old password" />
+    <input asp-for="NewPassword" type="password" placeholder="New password" />
+    <button type="submit">Change Password</button>
+</form>
+
+<hr />
+
+<form method="post" asp-page="/Logout">
+    <button type="submit">Logout</button>
+</form>
