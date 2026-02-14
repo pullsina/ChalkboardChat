@@ -1,29 +1,49 @@
 ﻿@page
 @model ProfileModel
 
-<h2>Your Profile</h2>
+<div class="profile-container">
 
-<p><strong>Username:</strong> @Model.CurrentUser?.UserName</p>
+    <h2>Your Profile</h2>
 
-<hr />
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="status-message">
+            @TempData["StatusMessage"]
+        </div>
+    }
 
-<h3>Change Username</h3>
-<form method="post" asp-page-handler="ChangeUsername">
-    <input asp-for="NewUsername" placeholder="New username" />
-    <button type="submit">Save</button>
-</form>
+    <div class="profile-section">
+        <p><strong>Username:</strong> @Model.CurrentUser?.UserName</p>
+    </div>
 
-<hr />
+    <div class="profile-section">
+        <h3>Change Username</h3>
+        <form method="post" asp-page-handler="ChangeUsername" class="form-block">
+            <input asp-for="NewUsername" placeholder="New username" class="input-field" />
+            <button type="submit" class="btn primary-btn">Save</button>
+        </form>
+    </div>
 
-<h3>Change Password</h3>
-<form method="post" asp-page-handler="ChangePassword">
-    <input asp-for="OldPassword" type="password" placeholder="Old password" />
-    <input asp-for="NewPassword" type="password" placeholder="New password" />
-    <button type="submit">Change Password</button>
-</form>
+    <div class="profile-section">
+        <h3>Change Password</h3>
+        <form method="post" asp-page-handler="ChangePassword" class="form-block">
+            <input asp-for="OldPassword" type="password" placeholder="Old password" class="input-field" />
+            <input asp-for="NewPassword" type="password" placeholder="New password" class="input-field" />
+            <button type="submit" class="btn primary-btn">Change Password</button>
+        </form>
+    </div>
 
-<hr />
+    <div class="profile-section" class="btn btn-warning">
+        <form method="post" asp-page="/Logout">
+            <button type="submit" class="btn logout-btn">Logout</button>
+        </form>
+    </div>
 
-<form method="post" asp-page="/Logout">
-    <button type="submit">Logout</button>
-</form>
+    <div class="profile-section">
+        <form method="post" asp-page-handler="DeleteAccount"
+              onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+            <button type="submit" class="btn danger-btn">Delete Account</button>
+        </form>
+    </div>
+
+</div>

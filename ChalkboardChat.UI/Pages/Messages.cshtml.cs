@@ -1,6 +1,7 @@
 using ChalkboardChat.BLL.Services;
 using ChalkboardChat.UI.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -11,10 +12,12 @@ namespace ChalkboardChat.UI.Pages
     public class MessagesModel : PageModel
     {
         private readonly IMessageService _messageService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public MessagesModel(IMessageService messageService)
+        public MessagesModel(IMessageService messageService, UserManager<IdentityUser> userManager)
         {
             _messageService = messageService;
+            _userManager = userManager;
         }
 
         public IEnumerable<MessageViewModel> Messages { get; set; } = new List<MessageViewModel>();
@@ -61,18 +64,27 @@ namespace ChalkboardChat.UI.Pages
         private async Task LoadMessagesAsync()
         {
             var data = await _messageService.GetAllMessagesAsync();
-
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Messages = data.Select(m => new MessageViewModel
+            var messages = new List<MessageViewModel>();
+
+            foreach (var m in data)
             {
-                Id = m.Id,
-                Username = m.Username,
-                Text = m.Message ?? "",
-                Date = m.Date,
-                IsMine = m.UserId == currentUserId,
-                IsDeleted = m.Message == null
-            }).ToList();
+                var user = await _userManager.FindByIdAsync(m.UserId);
+                var username = user?.UserName ?? "Deleted user";
+
+                messages.Add(new MessageViewModel
+                {
+                    Id = m.Id,
+                    Username = username,
+                    Text = m.Message ?? "",
+                    Date = m.Date,
+                    IsMine = m.UserId == currentUserId,
+                    IsDeleted = m.Message == null
+                });
+            }
+
+            Messages = messages;
         }
     }
 }
