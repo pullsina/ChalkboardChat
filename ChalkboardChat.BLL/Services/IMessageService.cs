@@ -14,6 +14,7 @@ namespace ChalkboardChat.BLL.Services
         Task<bool> AddMessageAsync(ClaimsPrincipal user, string message );
 
         Task<bool> DeleteMessageAsync(ClaimsPrincipal user, int messageId);
-        
+
+        Task<bool> ChangeUserNameOnMessagesAsync(string userId, string newUsername);
     }
 }

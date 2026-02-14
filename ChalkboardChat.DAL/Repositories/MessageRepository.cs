@@ -31,10 +31,17 @@ namespace ChalkboardChat.DAL.Repositories
             await _context.Messages.Where(m => m.Id == message.Id).ExecuteDeleteAsync();
         }
 
-        public async Task UpdateMessageAsync(MessageModel message)
+        public async Task<IEnumerable<MessageModel>> GetMessagesByUserIdAsync(string userId)
         {
-            _context.Messages.Update(message);
+            return await _context.Messages.Where(m => m.UserId == userId).OrderByDescending(m => m.Date).ToListAsync();
+        }
+
+        public async Task<bool> UpdateMessagesAsync(IEnumerable<MessageModel> messages)
+        {
+            _context.Messages.UpdateRange(messages);
             await _context.SaveChangesAsync();
+            return true;
+            
         }
     }
 }

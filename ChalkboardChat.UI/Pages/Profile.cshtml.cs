@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ChalkboardChat.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,11 +11,13 @@ namespace ChalkboardChat.UI.Pages
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IMessageService _messageService;
 
-        public ProfileModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ProfileModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IMessageService messageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _messageService = messageService;
         }
 
         public IdentityUser CurrentUser { get; set; }
@@ -54,6 +57,7 @@ namespace ChalkboardChat.UI.Pages
                 return RedirectToPage();
             }
 
+            await _messageService.ChangeUserNameOnMessagesAsync(CurrentUser.Id, NewUsername);
             await _signInManager.RefreshSignInAsync(CurrentUser);
 
             TempData["StatusMessage"] = "✔ Username updated successfully!";

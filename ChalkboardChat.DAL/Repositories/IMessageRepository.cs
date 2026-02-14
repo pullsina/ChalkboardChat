@@ -10,7 +10,8 @@ namespace ChalkboardChat.DAL.Repositories
         //Använder Enum för att hålla det mer abstrakt och skydda databaslogiken
         Task<IEnumerable<MessageModel>> GetAllMessagesAsync();
         Task AddMessageAsync (MessageModel message);
-        Task UpdateMessageAsync (MessageModel message);
+        Task<IEnumerable<MessageModel>> GetMessagesByUserIdAsync (string userId);
         Task DeleteMessageAsync (MessageModel message);
+        Task<bool> UpdateMessagesAsync(IEnumerable<MessageModel> messages);
     }
 }
