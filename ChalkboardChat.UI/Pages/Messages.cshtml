@@ -12,12 +12,6 @@
                 <span class="date">@msg.Date.ToString("yyyy-MM-dd HH:mm")</span>
             </div>
 
-            @if (msg.IsDeleted)
-            {
-                <p class="deleted">Message was deleted</p>
-            }
-            else
-            {
                 <p class="text">@msg.Text</p>
 
                 @if (msg.IsMine)
@@ -27,7 +21,6 @@
                         <button type="submit" class="delete-btn">Delete</button>
                     </form>
                 }
-            }
         </div>
     }
 </div>

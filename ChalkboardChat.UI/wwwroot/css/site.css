@@ -66,9 +66,22 @@ h2 {
     }
 
 .form-error {
-    color: #c0392b;
+    color: #d9534f;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
     font-size: 0.85em;
 }
+
+    .form-error ul {
+        list-style: none;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .form-error li {
+        list-style: none;
+    }
 
 .btn-primary {
     width: 100%;
