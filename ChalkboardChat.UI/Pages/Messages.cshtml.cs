@@ -71,7 +71,7 @@ namespace ChalkboardChat.UI.Pages
             foreach (var m in data)
             {
                 var user = await _userManager.FindByIdAsync(m.UserId);
-                var username = user?.UserName ?? "Deleted user";
+                var username = user?.UserName ?? $"{m.Username} (Deleted user) ";
 
                 messages.Add(new MessageViewModel
                 {

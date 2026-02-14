@@ -64,5 +64,17 @@ namespace ChalkboardChat.BLL.Services
             await _repo.DeleteMessageAsync(messageToDelete);
             return true;
         }
+
+        public async Task<bool> ChangeUserNameOnMessagesAsync(string userId, string newUsername)
+        {
+            var messages = await _repo.GetMessagesByUserIdAsync(userId);
+            foreach (var message in messages)
+            {
+                message.Username = newUsername;
+            }
+            
+            return await _repo.UpdateMessagesAsync(messages);
+            
+        }
     }
 }
